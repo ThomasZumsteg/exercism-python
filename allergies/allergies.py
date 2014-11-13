@@ -19,7 +19,7 @@ class Allergies(object):
         self.list = []
         # Reverse the binary of the score (i.e. '0b10010' is bin(18))
         # skip the '0b' part and use bits to select allergies from the list
-        for bit, allergie in zip((bin(score))[:1:-1], Allergies.allergie_list):
+        for bit, allergie in zip(reversed(format(score, "08b")), Allergies.allergie_list):
             if bit == '1':
                 self.list.append(allergie)
 

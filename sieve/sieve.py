@@ -2,11 +2,10 @@
 
 def sieve(lim):
     """Implimentation of sieve of Eratosthenes"""
-    sieve_list = [True] * lim
-    primes = []
-    for i in range(2, lim):
-        if sieve_list[i]:
-            primes.append(i)
-            for j in range(2*i, lim, i):
-                sieve_list[j] = False
+    multiples = set()
+    primes = [2,]
+    for num in range(3, lim, 2):
+        if num not in multiples:
+            primes.append(num)
+            multiples.update(range(num**2, lim, num))
     return primes

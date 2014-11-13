@@ -2,8 +2,4 @@
 
 def distance(strand_a, strand_b):
     """Counts the differences in two sequences of DNA"""
-    differences = 0
-    for nucleotide_a, nucleotide_b in zip(strand_a, strand_b):
-        if nucleotide_a != nucleotide_b:
-            differences += 1
-    return differences
+    return sum(1 for a,b in zip(strand_a, strand_b) if a != b)
