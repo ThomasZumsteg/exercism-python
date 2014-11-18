@@ -3,13 +3,11 @@
 class SumOfMultiples(object):
     """Holds the multiples to preform operations on"""
 
-    def __init__(self, *args):
+    def __init__(self, *multiples):
         """Initilize a set of base numbers,
         3 and 5 unless otherwise specified
         """
-        if args == ():
-            args = (3, 5)
-        self.multiples = args
+        self.multiples = multiples or (3, 5)
 
     def to(self, num):
         """Sums multiples of less then a value"""
