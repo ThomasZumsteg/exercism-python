@@ -1,29 +1,22 @@
 """A school database"""
+from collections import defaultdict
 
 class School(object):
     """Stores students and the associated grades"""
     def __init__(self, name):
         """Creates the DB"""
         self.name = name
-        self.db = {}
+        self.db = defaultdict(set)
 
     def add(self, student, level):
         """Adds students to the db"""
-        try:
-            self.db[level].add(student)
-        except KeyError:
-            self.db[level] = set((student,))
-
+        self.db[level].add(student)
+        
     def grade(self, level):
         """Returns the students in a grade"""
-        try:
-            return self.db[level]
-        except KeyError:
-            return set()
+        return self.db[level]
 
     def sort(self):
         """Returns the whole school in alphabetical order"""
-        return_db = {}
-        for level, students in self.db.iteritems():
-            return_db[level] = tuple(sorted(students))
-        return return_db
+        return {grade: tuple(sorted(students)) 
+                for grade, students in self.db.iteritems()}
