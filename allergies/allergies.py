@@ -16,13 +16,10 @@ class Allergies(object):
 
     def __init__(self, score):
         """Generates a list of allergies from a score"""
-        self.list = []
-        # Reverse the binary of the score (i.e. '0b10010' is bin(18))
-        # skip the '0b' part and use bits to select allergies from the list
-        for bit, allergie in zip(reversed(format(score, "08b")), Allergies.allergie_list):
-            if bit == '1':
-                self.list.append(allergie)
+        self.lst = [allergie
+                    for i, allergie in enumerate(Allergies.allergie_list)
+                    if 0 < (score & 1 << i )]
 
     def is_allergic_to(self, allergie):
         """Tests if allergie is on the list"""
-        return allergie in self.list
+        return allergie in self.lst
