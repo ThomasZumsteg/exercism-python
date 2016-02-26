@@ -1,17 +1,4 @@
-"""Sums multiples of an arbitrary set of numbers"""
-
-class SumOfMultiples(object):
-    """Holds the multiples to preform operations on"""
-
-    def __init__(self, *multiples):
-        """Initilize a set of base numbers,
-        3 and 5 unless otherwise specified
-        """
-        self.multiples = multiples or (3, 5)
-
-    def to(self, num):
-        """Sums multiples of less then a value"""
-        multiple_set = set()
-        for mul in self.multiples:
-            multiple_set.update(range(0, num, mul))
-        return sum(multiple_set)
+def sum_of_multiples(num, multiples=[3,5]):
+    """sum_of_multiples sums multiples less than num"""
+    return sum(set(n for mul in multiples if mul != 0
+               for n in range(0, num, mul)))
