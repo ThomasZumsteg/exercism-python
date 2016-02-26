@@ -1,5 +1,5 @@
 """Does a natrual language calculation"""
-from operator import add, sub, mul, div
+from operator import add, sub, mul, truediv
 from re import finditer, match
 
 def calculate(string):
@@ -7,7 +7,7 @@ def calculate(string):
     operators = {"plus": add,
                  "minus": sub,
                  "multiplied by": mul,
-                 "divided by": div,
+                 "divided by": truediv,
                 }
     start = "What is"
     function = " (" + "|".join(operators.keys()) + ")"
