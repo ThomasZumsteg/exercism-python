@@ -21,6 +21,6 @@ def numeral(num):
     """Converts integers to roman numberals"""
     roman = ""
     for digit in reversed(sorted(DIGITS.keys())):
-        roman += DIGITS[digit] * (num / digit)
+        roman += DIGITS[digit] * (num // digit)
         num %= digit
     return roman
