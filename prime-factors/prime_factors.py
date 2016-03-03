@@ -3,7 +3,7 @@
 def prime_factors(number):
     """Finds prime factors of a number"""
     factors = []
-    for factor in xrange(2, int(number**0.5)+1):
+    for factor in range(2, int(number**0.5)+1):
         while number % factor == 0:
             number /= factor
             factors.append(factor)
