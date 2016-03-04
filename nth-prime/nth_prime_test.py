@@ -2,7 +2,6 @@ import unittest
 
 from prime import nth_prime
 
-
 class NthPrimeTests(unittest.TestCase):
     def test_first_prime(self):
         self.assertEqual(2, nth_prime(1))
