@@ -18,7 +18,7 @@ def prime_gen():
             # multiples of prime, from smallest larger then start to stop
             multiples.update(range((-start) % prime + start, stop, prime))
         # Sieve
-        for num in xrange(start, stop, 2):
+        for num in range(start, stop, 2):
             if num not in multiples:
                 yield num
                 primes.append(num)
