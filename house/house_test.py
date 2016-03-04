@@ -7,6 +7,7 @@ from house import rhyme, verse
 
 class VerseTest(unittest.TestCase):
     def test_rhyme(self):
+        self.maxDiff = None
         expected = 'This is the house that Jack built.\n\n'\
                    'This is the malt\n'\
                    'that lay in the house that Jack built.\n\n'\
