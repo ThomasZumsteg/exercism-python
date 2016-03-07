@@ -20,11 +20,11 @@ class Luhn(object):
 
     def checksum(self):
         """Finds the checksum of the luhn code"""
-        return sum(self.addends()) % 10
+        return sum(self.addends())
 
     def is_valid(self):
         """Checks if luhn code is valid"""
-        return 0 == self.checksum()
+        return 0 == (self.checksum() % 10)
 
     @staticmethod
     def create(number):
