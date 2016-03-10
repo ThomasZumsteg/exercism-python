@@ -1,5 +1,5 @@
 """Names robots"""
-from string import uppercase
+from string import ascii_uppercase
 
 class Robot(object):
     """A robot naming class"""
@@ -23,7 +23,7 @@ class Robot(object):
         # Picks the last three digits
         digit_seed = robot_num % 1000
         chr_seed = (robot_num // 10**3) % 676
-        name = "%c%c%03d" %(uppercase[chr_seed // 26 - 1],
-                            uppercase[chr_seed % 26], digit_seed)
+        name = "%c%c%03d" %(ascii_uppercase[chr_seed // 26 - 1],
+                            ascii_uppercase[chr_seed % 26], digit_seed)
         Robot.num_robots += 1
         return name
