@@ -1,3 +1,4 @@
+from collections import Counter
 import unittest
 
 from luhn import Luhn
@@ -5,16 +6,20 @@ from luhn import Luhn
 
 class LuhnTests(unittest.TestCase):
     def test_addends(self):
-        self.assertEqual([1, 4, 1, 4, 1], Luhn(12121).addends())
+        # uses a Counter to avoid specifying order of return value
+        self.assertEqual(Counter([1, 4, 1, 4, 1]),
+                         Counter(Luhn(12121).addends()))
 
     def test_addends_large(self):
-        self.assertEqual([7, 6, 6, 1], Luhn(8631).addends())
+        # uses a Counter to avoid specifying order of return value
+        self.assertEqual(Counter([7, 6, 6, 1]),
+                         Counter(Luhn(8631).addends()))
 
     def test_checksum1(self):
-        self.assertEqual(2, Luhn(4913).checksum())
+        self.assertEqual(22, Luhn(4913).checksum())
 
     def test_ckecksum2(self):
-        self.assertEqual(1, Luhn(201773).checksum())
+        self.assertEqual(21, Luhn(201773).checksum())
 
     def test_invalid_number(self):
         self.assertFalse(Luhn(738).is_valid())

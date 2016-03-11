@@ -1,12 +1,8 @@
 """Sings the beer song"""
 
-def song(*args):
+def song(start=100, stop=0):
     """Sings the beer song"""
-    lyrics = []
-    verses = range(*sorted(args))
-    for n in reversed(verses + [verses[-1] + 1]):
-        lyrics.append(verse(n))
-    return "\n".join(lyrics + [''])
+    return "".join(verse(n) + "\n" for n in range(start, stop-1, -1))
 
 def verse(n):
     """Sings a verse of the beer song"""
@@ -20,5 +16,5 @@ def verse(n):
         return ("2 bottles of beer on the wall, 2 bottles of beer.\n"
                 "Take one down and pass it around, 1 bottle of beer on the wall.\n")
     else:
-        return ("%d bottles of beer on the wall, %d bottles of beer.\n"
-                "Take one down and pass it around, %d bottles of beer on the wall.\n" % (n, n, n-1))
+        return ("{0} bottles of beer on the wall, {0} bottles of beer.\n"
+                "Take one down and pass it around, {1} bottles of beer on the wall.\n".format(n, n-1))
