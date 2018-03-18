@@ -1,0 +1,51 @@
+NODE, EDGE, ATTR = range(3)
+
+
+class Node(object):
+    def __init__(self, name, attrs={}, *args):
+        self.name = name
+        self.attrs = attrs
+
+    def __eq__(self, other):
+        return self.name == other.name and self.attrs == other.attrs
+
+
+class Edge(object):
+    def __init__(self, src, dst, attrs={}):
+        self.src = src
+        self.dst = dst
+        self.attrs = attrs
+
+    def __eq__(self, other):
+        return (self.src == other.src and
+                self.dst == other.dst and
+                self.attrs == other.attrs)
+
+
+class Graph(object):
+    def __init__(self, data=[]):
+        self.nodes = []
+        self.edges = []
+        self.attrs = {} 
+
+        for datum in data:
+            try:
+                element_type, *args = datum
+            except ValueError:
+                raise TypeError("No element type {}".format(datum))
+            
+            if element_type == NODE:
+                name, attrs = args
+
+                self.nodes.append(Node(*args))
+            elif element_type == EDGE:
+                self.edges.append(Edge(*args))
+            elif element_type == ATTR:
+                FORMAT = "(ATTR, key, val)"
+                if len(args) < 2:
+                    raise TypeError("{} Not enough args: {}".format(FORMAT, args))
+                elif len(args) > 2:
+                    raise ValueError("{} To many args: {}".format(FORMAT, args))
+                self.attrs[args[0]] = args[1]
+            else:
+                raise TypeError("Not a known type")
