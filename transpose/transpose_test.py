@@ -24,108 +24,108 @@ class TransposeTests(unittest.TestCase):
             "\n".join(expected)
         )
 
-    # def test_two_characters_in_a_column(self):
-    #     input_line = [
-    #         "A",
-    #         "1"
-    #     ]
-    #     expected = "A1"
-    #     self.assertEqual(
-    #         transpose("\n".join(input_line)),
-    #         expected
-    #     )
+    def test_two_characters_in_a_column(self):
+        input_line = [
+            "A",
+            "1"
+        ]
+        expected = "A1"
+        self.assertEqual(
+            transpose("\n".join(input_line)),
+            expected
+        )
 
-    # def test_simple(self):
-    #     input_line = [
-    #         "ABC",
-    #         "123"
-    #     ]
-    #     expected = [
-    #         "A1",
-    #         "B2",
-    #         "C3"
-    #     ]
-    #     self.assertEqual(
-    #         transpose("\n".join(input_line)),
-    #         "\n".join(expected)
-    #     )
+    def test_simple(self):
+        input_line = [
+            "ABC",
+            "123"
+        ]
+        expected = [
+            "A1",
+            "B2",
+            "C3"
+        ]
+        self.assertEqual(
+            transpose("\n".join(input_line)),
+            "\n".join(expected)
+        )
 
-    # def test_single_line(self):
-    #     input_line = ["Single line."]
-    #     expected = [
-    #         "S",
-    #         "i",
-    #         "n",
-    #         "g",
-    #         "l",
-    #         "e",
-    #         " ",
-    #         "l",
-    #         "i",
-    #         "n",
-    #         "e",
-    #         "."
-    #     ]
-    #     self.assertEqual(
-    #         transpose("\n".join(input_line)),
-    #         "\n".join(expected)
-    #     )
+    def test_single_line(self):
+        input_line = ["Single line."]
+        expected = [
+            "S",
+            "i",
+            "n",
+            "g",
+            "l",
+            "e",
+            " ",
+            "l",
+            "i",
+            "n",
+            "e",
+            "."
+        ]
+        self.assertEqual(
+            transpose("\n".join(input_line)),
+            "\n".join(expected)
+        )
 
-    # def test_first_line_longer_than_second_line(self):
-    #     input_line = [
-    #         "The fourth line.",
-    #         "The fifth line."
-    #     ]
-    #     expected = [
-    #         "TT",
-    #         "hh",
-    #         "ee",
-    #         "  ",
-    #         "ff",
-    #         "oi",
-    #         "uf",
-    #         "rt",
-    #         "th",
-    #         "h ",
-    #         " l",
-    #         "li",
-    #         "in",
-    #         "ne",
-    #         "e.",
-    #         "."
-    #     ]
-    #     self.assertEqual(
-    #         transpose("\n".join(input_line)),
-    #         "\n".join(expected)
-    #     )
+    def test_first_line_longer_than_second_line(self):
+        input_line = [
+            "The fourth line.",
+            "The fifth line."
+        ]
+        expected = [
+            "TT",
+            "hh",
+            "ee",
+            "  ",
+            "ff",
+            "oi",
+            "uf",
+            "rt",
+            "th",
+            "h ",
+            " l",
+            "li",
+            "in",
+            "ne",
+            "e.",
+            "."
+        ]
+        self.assertEqual(
+            transpose("\n".join(input_line)),
+            "\n".join(expected)
+        )
 
-    # def test_second_line_longer_than_first_line(self):
-    #     input_line = [
-    #         "The first line.",
-    #         "The second line."
-    #     ]
-    #     expected = [
-    #         "TT",
-    #         "hh",
-    #         "ee",
-    #         "  ",
-    #         "fs",
-    #         "ie",
-    #         "rc",
-    #         "so",
-    #         "tn",
-    #         " d",
-    #         "l ",
-    #         "il",
-    #         "ni",
-    #         "en",
-    #         ".e",
-    #         " ."
-    #     ]
-    #     self.assertEqual(
-    #         transpose("\n".join(input_line)),
-    #         "\n".join(expected)
-    #     )
+    def test_second_line_longer_than_first_line(self):
+        input_line = [
+            "The first line.",
+            "The second line."
+        ]
+        expected = [
+            "TT",
+            "hh",
+            "ee",
+            "  ",
+            "fs",
+            "ie",
+            "rc",
+            "so",
+            "tn",
+            " d",
+            "l ",
+            "il",
+            "ni",
+            "en",
+            ".e",
+            " ."
+        ]
+        self.assertEqual(
+            transpose("\n".join(input_line)),
+            "\n".join(expected)
+        )
 
     # def test_square(self):
     #     input_line = [
