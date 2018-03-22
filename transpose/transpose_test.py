@@ -127,100 +127,100 @@ class TransposeTests(unittest.TestCase):
             "\n".join(expected)
         )
 
-    # def test_square(self):
-    #     input_line = [
-    #         "HEART",
-    #         "EMBER",
-    #         "ABUSE",
-    #         "RESIN",
-    #         "TREND"
-    #     ]
-    #     expected = [
-    #         "HEART",
-    #         "EMBER",
-    #         "ABUSE",
-    #         "RESIN",
-    #         "TREND"
-    #     ]
-    #     self.assertEqual(
-    #         transpose("\n".join(input_line)),
-    #         "\n".join(expected)
-    #     )
+    def test_square(self):
+        input_line = [
+            "HEART",
+            "EMBER",
+            "ABUSE",
+            "RESIN",
+            "TREND"
+        ]
+        expected = [
+            "HEART",
+            "EMBER",
+            "ABUSE",
+            "RESIN",
+            "TREND"
+        ]
+        self.assertEqual(
+            transpose("\n".join(input_line)),
+            "\n".join(expected)
+        )
 
-    # def test_rectangle(self):
-    #     input_line = [
-    #         "FRACTURE",
-    #         "OUTLINED",
-    #         "BLOOMING",
-    #         "SEPTETTE"
-    #     ]
-    #     expected = [
-    #         "FOBS",
-    #         "RULE",
-    #         "ATOP",
-    #         "CLOT",
-    #         "TIME",
-    #         "UNIT",
-    #         "RENT",
-    #         "EDGE"
-    #     ]
-    #     self.assertEqual(
-    #         transpose("\n".join(input_line)),
-    #         "\n".join(expected)
-    #     )
+    def test_rectangle(self):
+        input_line = [
+            "FRACTURE",
+            "OUTLINED",
+            "BLOOMING",
+            "SEPTETTE"
+        ]
+        expected = [
+            "FOBS",
+            "RULE",
+            "ATOP",
+            "CLOT",
+            "TIME",
+            "UNIT",
+            "RENT",
+            "EDGE"
+        ]
+        self.assertEqual(
+            transpose("\n".join(input_line)),
+            "\n".join(expected)
+        )
 
-    # def test_triangle(self):
-    #     input_line = [
-    #         "T",
-    #         "EE",
-    #         "AAA",
-    #         "SSSS",
-    #         "EEEEE",
-    #         "RRRRRR"
-    #     ]
-    #     expected = [
-    #         "TEASER",
-    #         " EASER",
-    #         "  ASER",
-    #         "   SER",
-    #         "    ER",
-    #         "     R"
-    #     ]
-    #     self.assertEqual(
-    #         transpose("\n".join(input_line)),
-    #         "\n".join(expected)
-    #     )
+    def test_triangle(self):
+        input_line = [
+            "T",
+            "EE",
+            "AAA",
+            "SSSS",
+            "EEEEE",
+            "RRRRRR"
+        ]
+        expected = [
+            "TEASER",
+            " EASER",
+            "  ASER",
+            "   SER",
+            "    ER",
+            "     R"
+        ]
+        self.assertEqual(
+            transpose("\n".join(input_line)),
+            "\n".join(expected)
+        )
 
-    # def test_mixed_line_length(self):
-    #     input_line = [
-    #         "The longest line.",
-    #         "A long line.",
-    #         "A longer line.",
-    #         "A line."
-    #     ]
-    #     expected = [
-    #         "TAAA",
-    #         "h   ",
-    #         "elll",
-    #         " ooi",
-    #         "lnnn",
-    #         "ogge",
-    #         "n e.",
-    #         "glr",
-    #         "ei ",
-    #         "snl",
-    #         "tei",
-    #         " .n",
-    #         "l e",
-    #         "i .",
-    #         "n",
-    #         "e",
-    #         "."
-    #     ]
-    #     self.assertEqual(
-    #         transpose("\n".join(input_line)),
-    #         "\n".join(expected)
-    #     )
+    def test_mixed_line_length(self):
+        input_line = [
+            "The longest line.",
+            "A long line.",
+            "A longer line.",
+            "A line."
+        ]
+        expected = [
+            "TAAA",
+            "h   ",
+            "elll",
+            " ooi",
+            "lnnn",
+            "ogge",
+            "n e.",
+            "glr",
+            "ei ",
+            "snl",
+            "tei",
+            " .n",
+            "l e",
+            "i .",
+            "n",
+            "e",
+            "."
+        ]
+        self.assertEqual(
+            transpose("\n".join(input_line)),
+            "\n".join(expected)
+        )
 
 
 if __name__ == '__main__':
