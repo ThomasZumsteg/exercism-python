@@ -1,4 +1,5 @@
 from json import dumps
+from itertools import chain
 
 class Tree(object):
     def __init__(self, label, children=[]):
@@ -18,23 +19,23 @@ class Tree(object):
         return self.__dict__() == other.__dict__()
 
     def from_pov(self, from_node):
-        path = self.path_to(self.label, from_node)
-        for step in path[1:]:
-            pass
+        path = self.find(from_node)
+        for step in path:
+            self.label = step.label
+            self.children = [c for c in step.children if c.label != step.label]
+        print(self)
         return self
 
     def path_to(self, from_node, to_node):
+        to_path, from_path = self.find(to_node), self.find(from_node)
+        return list(n.label for n in chain(reversed(from_path), to_path[1:]))
+
+    def find(self, to_node):
         queue = [(self, tuple())]
-        to_path, from_path = None, None
-        while to_path is None or from_path is None:
-            try:
-                node, path = queue.pop()
-            except IndexError:
-                raise ValueError("No path from {} to {}".format(from_node, to_node))
-            path += (node.label,)
-            if node.label == from_node:
-                from_path = path
+        while queue:
+            node, path = queue.pop()
+            path += (node,)
             if node.label == to_node:
-                to_path = path
+                return path
             queue.extend((c, path) for c in node.children)
-        return list(reversed(from_path)) + list(to_path[1:])
+        raise ValueError("No node {}".format(to_node))
