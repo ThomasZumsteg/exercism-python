@@ -11,17 +11,17 @@ class PovTest(unittest.TestCase):
         tree = Tree('x')
         self.assertTreeEquals(tree.from_pov('x'), tree)
 
-    # def test_can_reroot_tree_with_parent_and_one_sibling(self):
-    #     tree = Tree('parent', [
-    #         Tree('x'),
-    #         Tree('sibling')
-    #     ])
-    #     expected = Tree('x', [
-    #         Tree('parent', [
-    #             Tree('sibling')
-    #         ])
-    #     ])
-    #     self.assertTreeEquals(tree.from_pov('x'), expected)
+    def test_can_reroot_tree_with_parent_and_one_sibling(self):
+        tree = Tree('parent', [
+            Tree('x'),
+            Tree('sibling')
+        ])
+        expected = Tree('x', [
+            Tree('parent', [
+                Tree('sibling')
+            ])
+        ])
+        self.assertTreeEquals(tree.from_pov('x'), expected)
 
     # def test_can_reroot_tree_with_parent_and_many_siblings(self):
     #     tree = Tree('parent', [
