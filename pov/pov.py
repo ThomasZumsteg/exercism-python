@@ -2,9 +2,9 @@ from json import dumps
 from itertools import chain
 
 class Tree(object):
-    def __init__(self, label, children=[]):
+    def __init__(self, label, children=None):
         self.label = label
-        self.children = children
+        self.children = children or []
 
     def __dict__(self):
         return {self.label: [c.__dict__() for c in sorted(self.children)]}
@@ -19,11 +19,12 @@ class Tree(object):
         return self.__dict__() == other.__dict__()
 
     def from_pov(self, from_node):
-        path = self.find(from_node)
-        for step in path:
-            self.label = step.label
-            self.children = [c for c in step.children if c.label != step.label]
-        print(self)
+        steps = self.find(from_node)
+        for step in steps[1:]:
+            self.children = [c for c in self.children if c.label != step.label]
+            step.label, self.label = self.label, step.label
+            step.children, self.children = self.children, step.children
+            self.children.append(step)
         return self
 
     def path_to(self, from_node, to_node):
