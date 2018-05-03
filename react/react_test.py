@@ -62,134 +62,134 @@ class ReactTests(unittest.TestCase):
         input_.value = 3
         self.assertEqual(observer[-1], 4)
 
-    # def test_callbacks_only_fire_on_change(self):
-    #     input_ = InputCell(1)
-    #     output = ComputeCell(
-    #         [input_],
-    #         lambda inputs: 111 if inputs[0] < 3 else 222
-    #     )
+    def test_callbacks_only_fire_on_change(self):
+        input_ = InputCell(1)
+        output = ComputeCell(
+            [input_],
+            lambda inputs: 111 if inputs[0] < 3 else 222
+        )
 
-    #     observer = []
-    #     callback1 = self.callback_factory(observer)
+        observer = []
+        callback1 = self.callback_factory(observer)
 
-    #     output.add_callback(callback1)
-    #     input_.value = 2
-    #     self.assertEqual(observer, [])
-    #     input_.value = 4
-    #     self.assertEqual(observer[-1], 222)
+        output.add_callback(callback1)
+        input_.value = 2
+        self.assertEqual(observer, [])
+        input_.value = 4
+        self.assertEqual(observer[-1], 222)
 
-    # def test_callbacks_do_not_report_already_reported_values(self):
-    #     input_ = InputCell(1)
-    #     output = ComputeCell([input_], lambda inputs: inputs[0] + 1)
+    def test_callbacks_do_not_report_already_reported_values(self):
+        input_ = InputCell(1)
+        output = ComputeCell([input_], lambda inputs: inputs[0] + 1)
 
-    #     observer = []
-    #     callback1 = self.callback_factory(observer)
+        observer = []
+        callback1 = self.callback_factory(observer)
 
-    #     output.add_callback(callback1)
-    #     input_.value = 2
-    #     self.assertEqual(observer[-1], 3)
-    #     input_.value = 3
-    #     self.assertEqual(observer[-1], 4)
+        output.add_callback(callback1)
+        input_.value = 2
+        self.assertEqual(observer[-1], 3)
+        input_.value = 3
+        self.assertEqual(observer[-1], 4)
 
-    # def test_callbacks_can_fire_from_multiple_cells(self):
-    #     input_ = InputCell(1)
-    #     plus_one = ComputeCell([input_], lambda inputs: inputs[0] + 1)
-    #     minus_one = ComputeCell([input_], lambda inputs: inputs[0] - 1)
+    def test_callbacks_can_fire_from_multiple_cells(self):
+        input_ = InputCell(1)
+        plus_one = ComputeCell([input_], lambda inputs: inputs[0] + 1)
+        minus_one = ComputeCell([input_], lambda inputs: inputs[0] - 1)
 
-    #     cb1_observer, cb2_observer = [], []
-    #     callback1 = self.callback_factory(cb1_observer)
-    #     callback2 = self.callback_factory(cb2_observer)
+        cb1_observer, cb2_observer = [], []
+        callback1 = self.callback_factory(cb1_observer)
+        callback2 = self.callback_factory(cb2_observer)
 
-    #     plus_one.add_callback(callback1)
-    #     minus_one.add_callback(callback2)
-    #     input_.value = 10
+        plus_one.add_callback(callback1)
+        minus_one.add_callback(callback2)
+        input_.value = 10
 
-    #     self.assertEqual(cb1_observer[-1], 11)
-    #     self.assertEqual(cb2_observer[-1], 9)
+        self.assertEqual(cb1_observer[-1], 11)
+        self.assertEqual(cb2_observer[-1], 9)
 
-    # def test_callbacks_can_be_added_and_removed(self):
-    #     input_ = InputCell(11)
-    #     output = ComputeCell([input_], lambda inputs: inputs[0] + 1)
+    def test_callbacks_can_be_added_and_removed(self):
+        input_ = InputCell(11)
+        output = ComputeCell([input_], lambda inputs: inputs[0] + 1)
 
-    #     cb1_observer, cb2_observer, cb3_observer = [], [], []
-    #     callback1 = self.callback_factory(cb1_observer)
-    #     callback2 = self.callback_factory(cb2_observer)
-    #     callback3 = self.callback_factory(cb3_observer)
+        cb1_observer, cb2_observer, cb3_observer = [], [], []
+        callback1 = self.callback_factory(cb1_observer)
+        callback2 = self.callback_factory(cb2_observer)
+        callback3 = self.callback_factory(cb3_observer)
 
-    #     output.add_callback(callback1)
-    #     output.add_callback(callback2)
-    #     input_.value = 31
-    #     self.assertEqual(cb1_observer[-1], 32)
-    #     self.assertEqual(cb2_observer[-1], 32)
+        output.add_callback(callback1)
+        output.add_callback(callback2)
+        input_.value = 31
+        self.assertEqual(cb1_observer[-1], 32)
+        self.assertEqual(cb2_observer[-1], 32)
 
-    #     output.remove_callback(callback1)
-    #     output.add_callback(callback3)
-    #     input_.value = 41
-    #     self.assertEqual(cb2_observer[-1], 42)
-    #     self.assertEqual(cb3_observer[-1], 42)
+        output.remove_callback(callback1)
+        output.add_callback(callback3)
+        input_.value = 41
+        self.assertEqual(cb2_observer[-1], 42)
+        self.assertEqual(cb3_observer[-1], 42)
 
-    #     # Expect callback1 not to be called.
-    #     self.assertEqual(len(cb1_observer), 1)
+        # Expect callback1 not to be called.
+        self.assertEqual(len(cb1_observer), 1)
 
-    # def test_removing_a_callback_multiple_times(self):
-    #     """Guard against incorrect implementations which store their
-    #     callbacks in an array."""
-    #     input_ = InputCell(1)
-    #     output = ComputeCell([input_], lambda inputs: inputs[0] + 1)
+    def test_removing_a_callback_multiple_times(self):
+        """Guard against incorrect implementations which store their
+        callbacks in an array."""
+        input_ = InputCell(1)
+        output = ComputeCell([input_], lambda inputs: inputs[0] + 1)
 
-    #     cb1_observer, cb2_observer = [], []
-    #     callback1 = self.callback_factory(cb1_observer)
-    #     callback2 = self.callback_factory(cb2_observer)
+        cb1_observer, cb2_observer = [], []
+        callback1 = self.callback_factory(cb1_observer)
+        callback2 = self.callback_factory(cb2_observer)
 
-    #     output.add_callback(callback1)
-    #     output.add_callback(callback2)
-    #     output.remove_callback(callback1)
-    #     output.remove_callback(callback1)
-    #     output.remove_callback(callback1)
-    #     input_.value = 2
+        output.add_callback(callback1)
+        output.add_callback(callback2)
+        output.remove_callback(callback1)
+        output.remove_callback(callback1)
+        output.remove_callback(callback1)
+        input_.value = 2
 
-    #     self.assertEqual(cb1_observer, [])
-    #     self.assertEqual(cb2_observer[-1], 3)
+        self.assertEqual(cb1_observer, [])
+        self.assertEqual(cb2_observer[-1], 3)
 
-    # def test_callbacks_should_only_be_called_once(self):
-    #     """Guard against incorrect implementations which call a callback
-    #     function multiple times when multiple dependencies change."""
-    #     input_ = InputCell(1)
-    #     plus_one = ComputeCell([input_], lambda inputs: inputs[0] + 1)
-    #     minus_one1 = ComputeCell([input_], lambda inputs: inputs[0] - 1)
-    #     minus_one2 = ComputeCell([minus_one1], lambda inputs: inputs[0] - 1)
-    #     output = ComputeCell(
-    #         [plus_one, minus_one2],
-    #         lambda inputs: inputs[0] * inputs[1]
-    #     )
+    def test_callbacks_should_only_be_called_once(self):
+        """Guard against incorrect implementations which call a callback
+        function multiple times when multiple dependencies change."""
+        input_ = InputCell(1)
+        plus_one = ComputeCell([input_], lambda inputs: inputs[0] + 1)
+        minus_one1 = ComputeCell([input_], lambda inputs: inputs[0] - 1)
+        minus_one2 = ComputeCell([minus_one1], lambda inputs: inputs[0] - 1)
+        output = ComputeCell(
+            [plus_one, minus_one2],
+            lambda inputs: inputs[0] * inputs[1]
+        )
 
-    #     observer = []
-    #     callback1 = self.callback_factory(observer)
+        observer = []
+        callback1 = self.callback_factory(observer)
 
-    #     output.add_callback(callback1)
-    #     input_.value = 4
-    #     self.assertEqual(observer[-1], 10)
+        output.add_callback(callback1)
+        input_.value = 4
+        self.assertEqual(observer[-1], 10)
 
-    # def test_callbacks_not_called_so_long_as_output_not_changed(self):
-    #     """Guard against incorrect implementations which call callbacks
-    #     if dependencies change but output value doesn't change."""
-    #     input_ = InputCell(1)
-    #     plus_one = ComputeCell([input_], lambda inputs: inputs[0] + 1)
-    #     minus_one = ComputeCell([input_], lambda inputs: inputs[0] - 1)
-    #     always_two = ComputeCell(
-    #         [plus_one, minus_one],
-    #         lambda inputs: inputs[0] - inputs[1]
-    #     )
+    def test_callbacks_not_called_so_long_as_output_not_changed(self):
+        """Guard against incorrect implementations which call callbacks
+        if dependencies change but output value doesn't change."""
+        input_ = InputCell(1)
+        plus_one = ComputeCell([input_], lambda inputs: inputs[0] + 1)
+        minus_one = ComputeCell([input_], lambda inputs: inputs[0] - 1)
+        always_two = ComputeCell(
+            [plus_one, minus_one],
+            lambda inputs: inputs[0] - inputs[1]
+        )
 
-    #     observer = []
-    #     callback1 = self.callback_factory(observer)
+        observer = []
+        callback1 = self.callback_factory(observer)
 
-    #     always_two.add_callback(callback1)
-    #     input_.value = 2
-    #     input_.value = 3
-    #     input_.value = 4
-    #     input_.value = 5
-    #     self.assertEqual(observer, [])
+        always_two.add_callback(callback1)
+        input_.value = 2
+        input_.value = 3
+        input_.value = 4
+        input_.value = 5
+        self.assertEqual(observer, [])
 
     # Utility functions.
     def callback_factory(self, observer):

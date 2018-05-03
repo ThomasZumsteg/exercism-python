@@ -1,7 +1,9 @@
+CELLS = []
+
 class InputCell(object):
     def __init__(self, initial_value):
         self._value = initial_value
-        self._callbacks = {}
+        CELLS.append(self)
 
     @property
     def value(self):
@@ -9,46 +11,40 @@ class InputCell(object):
 
     @value.setter
     def value(self, value):
-        print("Updating with {}".format(value))
         if self._value != value:
             self._value = value
-            for c in self._callbacks:
-                c(value)
+            for cell in CELLS:
+                cell._update()
 
-    def add_callback(self, callback):
-        self._callbacks[callback] = callback
-        return callback
-
-    def remove_callback(self, callback):
-        del self._callbacks[callback]
+    def _update(self):
+        return self._value
 
 
 class ComputeCell(object):
     def __init__(self, inputs, compute_function):
-        self._value = None
-        def compute_val(val):
-            new_val = compute_function([i.value for i in inputs])
-            if new_val != self._value:
-                for c in self._callbacks:
-                    c(new_val)
-                return new_val
-        for i in inputs:
-            i.add_callback(compute_val)
-        self._function = compute_val
+        self._function = lambda: compute_function([i.value for i in inputs])
         self._callbacks = {}
+        self._value = self._function()
+        CELLS.append(self)
 
     @property
     def value(self):
-        new_val = self._function(None)
+        return self._value
+
+    def _update(self):
+        new_val = self._function()
         if new_val != self._value:
             self._value = new_val
-            for callback in self._callbacks.values():
-                callback(new_val)
-        return self._value
+            for c in self._callbacks.values():
+                c(new_val)
+        return new_val
 
     def add_callback(self, callback):
         self._callbacks[callback] = callback
         return callback
 
     def remove_callback(self, callback):
-        del self._callbacks[callback]
+        try:
+            del self._callbacks[callback]
+        except KeyError:
+            pass
