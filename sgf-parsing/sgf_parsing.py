@@ -23,8 +23,35 @@ class SgfTree(object):
 
 
 def parse(input_string):
-    if input_string[0:2] != '(;' or input_string[-1] != ')':
-        raise ValueError("Not a valid string: '{}'".format(input_string))
-    root = SgfTree()
-    
-    for c in 
+    parser = SgfTreeParser(input_string)
+    for c in input_string:
+        parser.parse(c)
+    return parser.result()
+
+
+class SgfTreeParser(object):
+    def __init__(self, input_string):
+        self._state = 'START'
+        self._root = None
+        self._input_string = input_string
+        self._states = {
+                'START': {
+                    '(': self._create_tree
+                    }
+                }
+
+    def parse(self, char):
+        self._states.get(self._state, self._raise_value_error)(char)
+
+    def result(self):
+        if self._root is None:
+            self._raise_value_error()
+        return self._root
+
+    def _raise_value_error(self, *args, **kwargs):
+        raise ValueError("Not a valid SgfTree '{}'".format(self._input_string))
+
+    def _create_tree(self, char):
+        self._root = SgfTree()
+        return self
+
