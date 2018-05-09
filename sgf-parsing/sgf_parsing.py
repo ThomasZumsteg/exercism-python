@@ -23,35 +23,53 @@ class SgfTree(object):
 
 
 def parse(input_string):
-    parser = SgfTreeParser(input_string)
-    for c in input_string:
-        parser.parse(c)
-    return parser.result()
+    queue = []
+    state = 'NEW'
+    for c, char in enumerate(input_string):
+        if state == 'NEW':
+            if char == '(':
+                state = 'TREE'
+                node = SgfTree()
+            else:
+                raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
+        elif state == 'TREE':
+            if char == ';':
+                state = 'KEY'
+                key = ''
+            else:
+                raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
+        elif state == 'KEY':
+            if char == ')':
+                if key == "":
+                    queue.append(node)
+                else:
+                    raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
+            elif char == '[':
+                if key == "":
+                    raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
+                value = ""
+                values = []
+                state = 'VALUE'
+            elif char.islower():
+                raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
+            else:
+                key += char
+        elif state == 'VALUE':
+            if char == ']':
+                if value != "":
+                    values.append(value)
+                    value = ""
+                else:
+                    raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
+            elif char == ')':
+                node.properties[key] = values
+                queue.append(node)
+            else:
+                value += char
+        else:
+            raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
+    if len(queue) != 1:
+        raise ValueError("Invalid SgfTree '{}'".format(input_string))
+    return queue[0]
 
-
-class SgfTreeParser(object):
-    def __init__(self, input_string):
-        self._state = 'START'
-        self._root = None
-        self._input_string = input_string
-        self._states = {
-                'START': {
-                    '(': self._create_tree
-                    }
-                }
-
-    def parse(self, char):
-        self._states.get(self._state, self._raise_value_error)(char)
-
-    def result(self):
-        if self._root is None:
-            self._raise_value_error()
-        return self._root
-
-    def _raise_value_error(self, *args, **kwargs):
-        raise ValueError("Not a valid SgfTree '{}'".format(self._input_string))
-
-    def _create_tree(self, char):
-        self._root = SgfTree()
-        return self
 

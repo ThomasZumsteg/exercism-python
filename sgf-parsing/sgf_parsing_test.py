@@ -14,35 +14,35 @@ class SgfParsingTest(unittest.TestCase):
         with self.assertRaisesWithMessage(ValueError):
             parse(input_string)
 
-    # def test_node_without_tree(self):
-    #     input_string = ';'
-    #     with self.assertRaisesWithMessage(ValueError):
-    #         parse(input_string)
+    def test_node_without_tree(self):
+        input_string = ';'
+        with self.assertRaisesWithMessage(ValueError):
+            parse(input_string)
 
-    # def test_node_without_properties(self):
-    #     input_string = '(;)'
-    #     expected = SgfTree()
-    #     self.assertEqual(parse(input_string), expected)
+    def test_node_without_properties(self):
+        input_string = '(;)'
+        expected = SgfTree()
+        self.assertEqual(parse(input_string), expected)
 
-    # def test_single_node_tree(self):
-    #     input_string = '(;A[B])'
-    #     expected = SgfTree(properties={'A': ['B']})
-    #     self.assertEqual(parse(input_string), expected)
+    def test_single_node_tree(self):
+        input_string = '(;A[B])'
+        expected = SgfTree(properties={'A': ['B']})
+        self.assertEqual(parse(input_string), expected)
 
-    # def test_properties_without_delimiter(self):
-    #     input_string = '(;a)'
-    #     with self.assertRaisesWithMessage(ValueError):
-    #         parse(input_string)
+    def test_properties_without_delimiter(self):
+        input_string = '(;a)'
+        with self.assertRaisesWithMessage(ValueError):
+            parse(input_string)
 
-    # def test_all_lowercase_property(self):
-    #     input_string = '(;a[b])'
-    #     with self.assertRaisesWithMessage(ValueError):
-    #         parse(input_string)
+    def test_all_lowercase_property(self):
+        input_string = '(;a[b])'
+        with self.assertRaisesWithMessage(ValueError):
+            parse(input_string)
 
-    # def test_upper_and_lowercase_property(self):
-    #     input_string = '(;Aa[b])'
-    #     with self.assertRaisesWithMessage(ValueError):
-    #         parse(input_string)
+    def test_upper_and_lowercase_property(self):
+        input_string = '(;Aa[b])'
+        with self.assertRaisesWithMessage(ValueError):
+            parse(input_string)
 
     # def test_two_nodes(self):
     #     input_string = '(;A[B];B[C])'
