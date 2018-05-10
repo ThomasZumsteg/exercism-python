@@ -21,55 +21,75 @@ class SgfTree(object):
                 return False
         return True
 
+    def __repr__(self):
+        return 'SgfTree({}, [{}])'.format(
+                self.properties,
+                ','.join(repr(c) for c in self.children))
 
 def parse(input_string):
-    queue = []
-    state = 'NEW'
+    stack = []
+    state = 'START'
+    escape = False
+    def raise_error(c):
+        raise ValueError(
+                "Invalid SgfTree '{}' at '{}' {} '{}'".format(
+                    input_string,
+                    input_string[:c],
+                    input_string[c],
+                    input_string[c+1:]))
     for c, char in enumerate(input_string):
-        if state == 'NEW':
-            if char == '(':
-                state = 'TREE'
-                node = SgfTree()
-            else:
-                raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
-        elif state == 'TREE':
-            if char == ';':
-                state = 'KEY'
-                key = ''
-            else:
-                raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
+        if state == 'START' and char == '(':
+            state = 'TREE'
+        elif state == 'TREE' and char == ';':
+            stack.append(SgfTree())
+            state = 'KEY'
+            key = ''
         elif state == 'KEY':
-            if char == ')':
-                if key == "":
-                    queue.append(node)
-                else:
-                    raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
+            if char == ')' and key and values:
+                stack[-1].properties[key] = values
+            elif char == '(':
+                stack[-1].properties[key] = values
+                if len(stack) > 2:
+                    node = stack.pop()
+                    stack[-1].children.append(node)
+            elif char == ';':
+                stack[-1].properties[key] = values
+                if len(stack) > 1:
+                    node = stack.pop()
+                    stack[-1].children.append(node)
+                stack.append(SgfTree())
+                key = ''
             elif char == '[':
                 if key == "":
                     raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
                 value = ""
-                values = []
+                if key not in stack[-1].properties:
+                    stack[-1].properties[key] = []
+                    values = stack[-1].properties[key]
                 state = 'VALUE'
             elif char.islower():
                 raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
             else:
                 key += char
         elif state == 'VALUE':
-            if char == ']':
-                if value != "":
-                    values.append(value)
-                    value = ""
-                else:
-                    raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
-            elif char == ')':
-                node.properties[key] = values
-                queue.append(node)
+            if char == '\\':
+                escape = True
+            elif not escape and char == ']' and value != "":
+                values.append(value)
+                value = ""
+                state = "KEY"
+            elif char == '\t':
+                value += ' '
             else:
                 value += char
+                escape = False
         else:
-            raise ValueError("Invalid SgfTree '{}' at '{}' {} '{}'".format(input_string,input_string[:c], input_string[c], input_string[c+1:]))
-    if len(queue) != 1:
+            raise_error(c)
+    if len(stack) == 0:
         raise ValueError("Invalid SgfTree '{}'".format(input_string))
-    return queue[0]
+    while len(stack) > 1:
+        node = stack.pop()
+        stack[-1].children.append(node)
+    return stack[0]
 
 
