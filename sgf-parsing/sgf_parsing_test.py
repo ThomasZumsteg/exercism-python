@@ -44,15 +44,15 @@ class SgfParsingTest(unittest.TestCase):
         with self.assertRaisesWithMessage(ValueError):
             parse(input_string)
 
-    # def test_two_nodes(self):
-    #     input_string = '(;A[B];B[C])'
-    #     expected = SgfTree(
-    #         properties={'A': ['B']},
-    #         children=[
-    #             SgfTree({'B': ['C']})
-    #         ]
-    #     )
-    #     self.assertEqual(parse(input_string), expected)
+    def test_two_nodes(self):
+        input_string = '(;A[B];B[C])'
+        expected = SgfTree(
+            properties={'A': ['B']},
+            children=[
+                SgfTree({'B': ['C']})
+            ]
+        )
+        self.assertEqual(parse(input_string), expected)
 
     # def test_two_child_trees(self):
     #     input_string = '(;A[B](;B[C])(;C[D]))'
