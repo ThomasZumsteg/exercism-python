@@ -28,7 +28,6 @@ class RestAPITest(unittest.TestCase):
         }
         self.assertDictEqual(json.loads(response), expected)
 
-    @unittest.skip
     def test_get_single_user(self):
         database = {
             'users': [
@@ -63,7 +62,6 @@ class RestAPITest(unittest.TestCase):
         }
         self.assertDictEqual(json.loads(response), expected)
 
-    @unittest.skip
     def test_iou_both_users_have_0_balance(self):
         database = {
             'users': [
@@ -110,7 +108,6 @@ class RestAPITest(unittest.TestCase):
         }
         self.assertDictEqual(json.loads(response), expected)
 
-    @unittest.skip
     def test_borrower_has_negative_balance(self):
         database = {
             'users': [
