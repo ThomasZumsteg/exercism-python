@@ -8,16 +8,24 @@ class RestAPI(object):
         for user in self.database['users']:
             if user['name'] == username:
                 return user
-
+    
+    def lend(self, borrower_name, lender_name, amount):
+        borrower = self._select_username(borrower_name)
+        lender = self._select_username(lender_name)
+        borrower['owes'][lender['name']] = amount
+        borrower['balance'] -= amount
+        lender['owed_by'][borrower['name']] = amount
+        lender['balance'] += amount
+        return { 'users': sorted([lender, borrower], key=lambda v: v['name'])}
 
     def get(self, url, payload=None):
         data = json.loads(payload) if payload else None
         if url == '/users':
             if payload is None:
-                return json.dumps(self.database)
-            username = data['users']
-            result = { 'users' : 
-                [self._select_username(username)] }
+                result = self.database
+            else:
+                result = { 'users' : 
+                    [self._select_username(data['users'])] }
         return json.dumps(result)
 
 
@@ -32,12 +40,5 @@ class RestAPI(object):
                 'balance': 0} 
             self.database[data['user']] = result
         elif url == '/iou':
-            borrower = self._select_username(data['borrower'])
-            lender = self._select_username(data['lender'])
-            amount = data['amount']
-            borrower['owes'][lender['name']] = amount
-            borrower['balance'] -= amount
-            lender['owed_by'][borrower['name']] = amount
-            lender['balance'] += amount
-            result = { 'users': [lender, borrower]}
+            result = self.lend(data['borrower'], data['lender'], data['amount'])
         return json.dumps(result)

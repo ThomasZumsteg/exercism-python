@@ -165,7 +165,6 @@ class RestAPITest(unittest.TestCase):
         }
         self.assertDictEqual(json.loads(response), expected)
 
-    @unittest.skip
     def test_lender_has_negative_balance(self):
         database = {
             'users': [
