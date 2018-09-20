@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 
 class RestAPI(object):
     def __init__(self, database=None):
@@ -12,10 +13,20 @@ class RestAPI(object):
     def lend(self, borrower_name, lender_name, amount):
         borrower = self._select_username(borrower_name)
         lender = self._select_username(lender_name)
-        borrower['owes'][lender['name']] = amount
+
+        if lender_name in borrower['owed_by']:
+            borrower['owed_by'][lender_name] -= amount
+        else:
+            borrower['owes'][lender_name] = borrower['owes'].get(lender_name, 0) + amount
         borrower['balance'] -= amount
-        lender['owed_by'][borrower['name']] = amount
+
+        if borrower_name in lender['owes']:
+            lender['owes'][borrower_name] -= amount
+        else:
+            lender['owed_by'][borrower_name] = lender['owed_by'].get(borrower_name, 0) + amount
         lender['balance'] += amount
+
+
         return { 'users': sorted([lender, borrower], key=lambda v: v['name'])}
 
     def get(self, url, payload=None):

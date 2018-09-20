@@ -223,7 +223,6 @@ class RestAPITest(unittest.TestCase):
         }
         self.assertDictEqual(json.loads(response), expected)
 
-    @unittest.skip
     def test_lender_owes_borrower(self):
         database = {
             "users": [
