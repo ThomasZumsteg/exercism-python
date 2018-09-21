@@ -15,13 +15,23 @@ class RestAPI(object):
         lender = self._select_username(lender_name)
 
         if lender_name in borrower['owed_by']:
-            borrower['owed_by'][lender_name] -= amount
+            if amount < borrower['owed_by'][lender_name]:
+                borrower['owed_by'][lender_name] -= amount
+            else:
+                if amount != borrower['owed_by'][lender_name]:
+                    borrower['owes'][lender_name] = amount - borrower['owed_by'][lender_name]
+                del borrower['owed_by'][lender_name]
         else:
             borrower['owes'][lender_name] = borrower['owes'].get(lender_name, 0) + amount
         borrower['balance'] -= amount
 
         if borrower_name in lender['owes']:
-            lender['owes'][borrower_name] -= amount
+            if amount < lender['owes'][borrower_name]:
+                lender['owes'][borrower_name] -= amount
+            else:
+                if amount != lender['owes'][borrower_name]:
+                    lender['owed_by'][borrower_name] = amount - lender['owes'][borrower_name]
+                del lender['owes'][borrower_name]
         else:
             lender['owed_by'][borrower_name] = lender['owed_by'].get(borrower_name, 0) + amount
         lender['balance'] += amount
