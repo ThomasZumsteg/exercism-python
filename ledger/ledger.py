@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from collections import namedtuple
+
+
+Local = namedtuple('Local', ('date', 'words', 'number'))
 
 
 class LedgerEntry(object):
@@ -17,16 +21,33 @@ def create_entry(date, description, change):
     return entry
 
 
+def us_date(day, month, year):
+    return '{month:02d}/{day:02d}/{year:04d}'.format(month=month, day=day, year=year)
+
+def nl_date(day, month, year):
+    return '{day:02d}-{month:02d}-{year:04d}'.format(month=month, day=day, year=year)
+
+def us_number(amount):
+
+    pass
+
+def nl_number(amount):
+    pass
+
 def format_entries(currency, locale, entries):
     localization = {
-        'en_US': {"Date": "Date", "Description": "Description", "Change": "Change"},
-        'nl_NL': {"Date": "Datum", "Description": "Omschrijving", "Change": "Verandering"}
+        'en_US':  (
+            '{month:02d}/{day:02d}/{year:04d} | {desc:<25s} | ',
+             {"Date": "Date", "Description": "Description", "Change": "Change"}),
+        'nl_NL': (
+            '{day:02d}-{month:02d}-{year:04d} | {desc:<25s} | ',
+            {"Date": "Datum", "Description": "Omschrijving", "Change": "Verandering"})
     }
     # Generate Header Row
-    table = "{Date:10s} | {Description:25s} | {Change:13s}".format(**localization[locale])
+    table = ["{Date:10s} | {Description:25s} | {Change:13s}".format(**localization[locale][1])]
     if locale == 'en_US':
         while len(entries) > 0:
-            table += '\n'
+            table.append('')
 
             # Find next entry in order
             min_entry_index = -1
@@ -48,40 +69,12 @@ def format_entries(currency, locale, entries):
             entry = entries[min_entry_index]
             entries.pop(min_entry_index)
 
-            # Write entry date to table
-            month = entry.date.month
-            month = str(month)
-            if len(month) < 2:
-                month = '0' + month
-            date_str = month
-            date_str += '/'
-            day = entry.date.day
-            day = str(day)
-            if len(day) < 2:
-                day = '0' + day
-            date_str += day
-            date_str += '/'
-            year = entry.date.year
-            year = str(year)
-            while len(year) < 4:
-                year = '0' + year
-            date_str += year
-            table += date_str
-            table += ' | '
-
-            # Write entry description to table
-            # Truncate if necessary
-            if len(entry.description) > 25:
-                for i in range(22):
-                    table += entry.description[i]
-                table += '...'
-            else:
-                for i in range(25):
-                    if len(entry.description) > i:
-                        table += entry.description[i]
-                    else:
-                        table += ' '
-            table += ' | '
+            desc = entry.description
+            table[-1] += localization['en_US'][0].format(
+                    day=entry.date.day,
+                    month=entry.date.month,
+                    year=entry.date.year,
+                    desc=(desc if len(desc) <= 25 else desc[:22] + '...'))
 
             # Write entry change to table
             if currency == 'USD':
@@ -115,7 +108,7 @@ def format_entries(currency, locale, entries):
                     change_str += ' '
                 while len(change_str) < 13:
                     change_str = ' ' + change_str
-                table += change_str
+                table[-1] += change_str
             elif currency == 'EUR':
                 change_str = ''
                 if entry.change < 0:
@@ -147,11 +140,11 @@ def format_entries(currency, locale, entries):
                     change_str += ' '
                 while len(change_str) < 13:
                     change_str = ' ' + change_str
-                table += change_str
-        return table
+                table[-1] += change_str
+        return '\n'.join(table)
     elif locale == 'nl_NL':
         while len(entries) > 0:
-            table += '\n'
+            table.append('')
 
             # Find next entry in order
             min_entry_index = -1
@@ -179,40 +172,12 @@ def format_entries(currency, locale, entries):
             entry = entries[min_entry_index]
             entries.pop(min_entry_index)
 
-            # Write entry date to table
-            day = entry.date.day
-            day = str(day)
-            if len(day) < 2:
-                day = '0' + day
-            date_str = day
-            date_str += '-'
-            month = entry.date.month
-            month = str(month)
-            if len(month) < 2:
-                month = '0' + month
-            date_str += month
-            date_str += '-'
-            year = entry.date.year
-            year = str(year)
-            while len(year) < 4:
-                year = '0' + year
-            date_str += year
-            table += date_str
-            table += ' | '
-
-            # Write entry description to table
-            # Truncate if necessary
-            if len(entry.description) > 25:
-                for i in range(22):
-                    table += entry.description[i]
-                table += '...'
-            else:
-                for i in range(25):
-                    if len(entry.description) > i:
-                        table += entry.description[i]
-                    else:
-                        table += ' '
-            table += ' | '
+            desc = entry.description
+            table[-1] += localization['nl_NL'][0].format(
+                day=entry.date.day,
+                month=entry.date.month,
+                year=entry.date.year,
+                desc=(desc if len(desc) <= 25 else desc[:22] + '...'))
 
             # Write entry change to table
             if currency == 'USD':
@@ -242,7 +207,7 @@ def format_entries(currency, locale, entries):
                 change_str += ' '
                 while len(change_str) < 13:
                     change_str = ' ' + change_str
-                table += change_str
+                table[-1] += change_str
             elif currency == 'EUR':
                 change_str = u'€ '
                 if entry.change < 0:
@@ -270,5 +235,5 @@ def format_entries(currency, locale, entries):
                 change_str += ' '
                 while len(change_str) < 13:
                     change_str = ' ' + change_str
-                table += change_str
-        return table
+                table[-1] += change_str
+        return '\n'.join(table)
